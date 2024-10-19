@@ -1,0 +1,162 @@
+/* styles.css */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: url('b.png') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 120vh;
+    padding: 0;
+    margin: 0;
+}
+
+/* Header Styles */
+header {
+    width: 100%;
+    padding: 100px 0;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.5); /* Semi-transparent overlay */
+    color: white;
+    position: relative;
+}
+
+.header-overlay {
+    position: relative;
+    z-index: 1;
+}
+
+header h1 {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 20px;
+    color: #ddd;
+}
+
+/* Container Styles */
+.container {
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px; /* Slight overlap with header */
+}
+
+h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.dropzone {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.dropzone.dragging {
+    border-color: #66b2ff;
+    background-color: #f0f8ff;
+}
+
+.dropzone p {
+    color: #999;
+}
+
+.filename {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+input[type="file"],
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #dcdcdc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: border 0.3s ease;
+}
+
+input[type="file"]:hover,
+input[type="text"]:hover,
+input[type="file"]:focus,
+input[type="text"]:focus {
+    border-color: #66b2ff;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#result {
+    margin-top: 20px;
+}
+
+audio,
+img {
+    max-width: 100%;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 32px;
+    }
+
+    header p {
+        font-size: 16px;
+    }
+
+    .container {
+        padding: 20px;
+        width: 95%;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    button {
+        font-size: 14px;
+    }
+}

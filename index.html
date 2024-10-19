@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Input Processor</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-overlay">
+            <h1>Multi-Input Processor</h1>
+            <p>Upload your images, audio files, and text for processing with ease!</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Give Your Inputs</h1>
+        <form id="upload-form" action="/process-input/" enctype="multipart/form-data" method="post">
+            <!-- Image input with drag and drop -->
+            <label for="image">Upload Image (for blur):</label>
+            <div id="image-dropzone" class="dropzone">
+                <p>Drag & Drop an image or click to upload</p>
+                <input type="file" name="file_image" id="image" accept="image/*" required hidden />
+            </div>
+            <p id="image-filename" class="filename"></p> <!-- Display image file name -->
+
+            <!-- Audio input with drag and drop -->
+            <label for="audio">Upload Audio:</label>
+            <div id="audio-dropzone" class="dropzone">
+                <p>Drag & Drop an audio file or click to upload</p>
+                <input type="file" name="file_audio" id="audio" accept="audio/*" required hidden />
+            </div>
+            <p id="audio-filename" class="filename"></p> <!-- Display audio file name -->
+            
+            <!-- Text input -->
+            <label for="text_input">Enter Text (to convert to audio):</label>
+            <input type="text" name="text_input" id="text_input" placeholder="Enter text..." required />
+            
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="result" style="display: none;">
+            <h2>Results:</h2>
+            <p id="translated-text"></p>
+            <img id="blurred-img" src="" alt="Blurred image will appear here." style="display: none;" />
+            <audio id="processed-audio" controls style="display: none;"></audio>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const imgElement = document.getElementById('blurred-img');
+        const audioElement = document.getElementById('processed-audio');
+        const resultSection = document.getElementById('result');
+        const imageDropzone = document.getElementById('image-dropzone');
+        const audioDropzone = document.getElementById('audio-dropzone');
+        const imageInput = document.getElementById('image');
+        const audioInput = document.getElementById('audio');
+        const imageFilenameDisplay = document.getElementById('image-filename');
+        const audioFilenameDisplay = document.getElementById('audio-filename');
+
+        // Handle form submission
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const response = await fetch('/process-input/', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            // Display results
+            if (data.image_url) {
+                imgElement.src = data.image_url;
+                imgElement.style.display = 'block'; // Make image visible
+            }
+            if (data.audio_url) {
+                audioElement.src = data.audio_url;
+                audioElement.style.display = 'block'; // Make audio visible
+            }
+
+            // Show result section and text
+            resultSection.style.display = 'block';
+            const translatedTextElement = document.getElementById('translated-text');
+            translatedTextElement.textContent = data.translated_text;
+        };
+
+        // Drag and drop for image
+        imageDropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            imageDropzone.classList.add('dragging');
+        });
+
+        imageDropzone.addEventListener('dragleave', () => {
+            imageDropzone.classList.remove('dragging');
+        });
+
+        imageDropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            imageDropzone.classList.remove('dragging');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                imageInput.files = e.dataTransfer.files;
+                imageFilenameDisplay.textContent = `Selected file: ${file.name}`; // Display image file name
+            }
+        });
+
+        imageDropzone.addEventListener('click', () => imageInput.click());
+
+        // Listen for manual file selection for image input
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                imageFilenameDisplay.textContent = `Selected file: ${file.name}`; // Display image file name
+            }
+        });
+
+        // Drag and drop for audio
+        audioDropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            audioDropzone.classList.add('dragging');
+        });
+
+        audioDropzone.addEventListener('dragleave', () => {
+            audioDropzone.classList.remove('dragging');
+        });
+
+        audioDropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            audioDropzone.classList.remove('dragging');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('audio/')) {
+                audioInput.files = e.dataTransfer.files;
+                audioFilenameDisplay.textContent = `Selected file: ${file.name}`; // Display audio file name
+            }
+        });
+
+        audioDropzone.addEventListener('click', () => audioInput.click());
+
+        // Listen for manual file selection for audio input
+        audioInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                audioFilenameDisplay.textContent = `Selected file: ${file.name}`; // Display audio file name
+            }
+        });
+    </script>
+</body>
+</html>
